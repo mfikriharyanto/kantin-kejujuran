@@ -82,6 +82,12 @@ class UserTest {
     }
 
     @Test
+    public void testGetRoleShouldReturnCorrectly() {
+        Role role = user.getRole();
+        assertEquals(Role.USER, role);
+    }
+
+    @Test
     public void testSetIdShouldChangeId() {
         user = new User();
         user.setId("54321");
@@ -95,5 +101,13 @@ class UserTest {
         user.setPassword("54321");
         String password = user.getPassword();
         assertEquals("54321", password);
+    }
+
+    @Test
+    void testSetRoleShouldChangePassword() {
+        user = new User();
+        user.setRole(Role.ADMIN);
+        Role role = user.getRole();
+        assertEquals(Role.ADMIN, role);
     }
 }
