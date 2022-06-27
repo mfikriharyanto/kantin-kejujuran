@@ -9,7 +9,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 
 class UserTest {
     private Class<?> userClass;
@@ -18,7 +20,7 @@ class UserTest {
     @BeforeEach
     public void setUp() throws Exception {
         userClass = Class.forName("com.project.kantinkejujuran.model.User");
-        user = new User("12345", "12345");
+        user = new User("12345", "12345", Role.USER);
     }
 
     @Test
@@ -36,7 +38,9 @@ class UserTest {
 
     @Test
     void testGetAuthoritiesShouldReturnCorrectly() {
-        assertEquals(new ArrayList<>(), user.getAuthorities());
+        Collection<? extends GrantedAuthority> authentication = user.getAuthorities();
+        assertEquals(Collections.singletonList(
+                new SimpleGrantedAuthority(user.getRole().name())), authentication);
     }
 
     @Test
@@ -79,7 +83,7 @@ class UserTest {
 
     @Test
     public void testSetIdShouldChangeId() {
-    	user = new User();
+        user = new User();
         user.setId("54321");
         String id = user.getId();
         assertEquals("54321", id);
@@ -87,7 +91,7 @@ class UserTest {
 
     @Test
     void testSetPasswordShouldChangePassword() {
-    	user = new User();
+        user = new User();
         user.setPassword("54321");
         String password = user.getPassword();
         assertEquals("54321", password);
