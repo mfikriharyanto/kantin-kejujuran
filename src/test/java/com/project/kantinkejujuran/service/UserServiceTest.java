@@ -50,6 +50,7 @@ public class UserServiceTest {
             userService.save(userDto);
         });
         assertEquals(thrown.getMessage(),"ID is not valid");
+        verify(userRepository, times(0)).save(any(User.class));
     }
 
     @Test
@@ -59,6 +60,7 @@ public class UserServiceTest {
             userService.save(userDto);
         });
         assertEquals(thrown.getMessage(),"ID may only contain numbers");
+        verify(userRepository, times(0)).save(any(User.class));
     }
 
     @Test
@@ -68,6 +70,7 @@ public class UserServiceTest {
             userService.save(userDto);
         });
         assertEquals(thrown.getMessage(),"ID should consist of a 5 digits number");
+        verify(userRepository, times(0)).save(any(User.class));
     }
 
     @Test
@@ -77,6 +80,7 @@ public class UserServiceTest {
             userService.save(userDto);
         });
         assertEquals(thrown.getMessage(),"ID should consist of a 5 digits number");
+        verify(userRepository, times(0)).save(any(User.class));
     }
 
     @Test
@@ -89,6 +93,7 @@ public class UserServiceTest {
             userService.save(userDto);
         });
         assertEquals(thrown.getMessage(),"ID is already registered");
+        verify(userRepository, times(0)).save(any(User.class));
     }
 
     @Test
