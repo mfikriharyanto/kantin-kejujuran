@@ -7,8 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class KantinKejujuranApplicationTests {
 
     @Test
-    void contextLoads() {
-        
+    public void main() {
+        KantinKejujuranApplication.main(new String[] {});
     }
 
 }
