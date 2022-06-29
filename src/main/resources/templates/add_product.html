@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store | Kantin Kejujuran</title>
+</head>
+<body>
+    <h1>Add Product</h1>
+    <form th:action="@{/store/add}" method="POST">
+        <div>
+            <input type="text" name="name" placeholder="Enter Name" required>
+        </div>
+        <div>
+            <input type="text" name="description" placeholder="Enter Description" required>
+        </div>
+        <div>
+            <input type="text" name="price" placeholder="Enter Price" required>
+        </div>
+        <div>
+            <button type="submit">Add Product</button>
+        </div>
+    </form>
+</body>
+</html>
