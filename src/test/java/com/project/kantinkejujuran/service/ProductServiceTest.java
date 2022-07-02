@@ -1,7 +1,6 @@
 package com.project.kantinkejujuran.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -14,6 +13,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,20 +31,52 @@ public class ProductServiceTest {
 
     @BeforeEach
     public void setUp() {
-        product = new Product("Sate", "Terbuat dari daging pilihan", 10000);
+        product = new Product("Sate", "Terbuat dari daging pilihan", 10000, "");
     }
 
     @Test
-    public void testSaveProductSuccess() {
+    public void testSaveProductSuccess() throws Exception {
+        MockMultipartFile image = new MockMultipartFile("image", "test.png",
+                String.valueOf(MediaType.IMAGE_PNG), "image".getBytes());
+
         ProductDto productDto = new ProductDto();
         productDto.setName("Bakso");
         productDto.setDescription("Terbuat dari daging berkualitas");
         productDto.setPrice(15000);
+        productDto.setImage(image);
         productService.save(productDto);
 
-        productDto = new ProductDto("Mie ayam", "Terbuat dari bahan berkualitas", 10000);
+        productDto = new ProductDto("Mie ayam", "Terbuat dari bahan berkualitas", 10000, image);
         productService.save(productDto);
         verify(productRepository, times(2)).save(any(Product.class));
+    }
+
+    @Test
+    public void testSaveProductInvalidPrice() {
+        MockMultipartFile image = new MockMultipartFile("image", "test.png",
+                String.valueOf(MediaType.IMAGE_PNG), "image".getBytes());
+
+        ProductDto productDto = new ProductDto("Mie ayam",
+                "Terbuat dari bahan berkualitas", -10000, image);
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            productService.save(productDto);
+        });
+        assertEquals(thrown.getMessage(),"Invalid price");
+        verify(productRepository, times(0)).save(any(Product.class));
+    }
+
+    @Test
+    public void testSaveProductInvalidImage() {
+        MockMultipartFile text = new MockMultipartFile("text", "test.txt",
+                String.valueOf(MediaType.TEXT_PLAIN), "text".getBytes());
+
+        ProductDto productDto = new ProductDto("Mie ayam",
+                "Terbuat dari bahan berkualitas", 10000, text);
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            productService.save(productDto);
+        });
+        assertEquals(thrown.getMessage(),"Invalid image");
+        verify(productRepository, times(0)).save(any(Product.class));
     }
 
     @Test

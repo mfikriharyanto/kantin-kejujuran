@@ -6,6 +6,7 @@ import com.project.kantinkejujuran.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
 import java.util.List;
 
 @Service
@@ -15,10 +16,16 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
 
     @Override
-    public void save(ProductDto productDto) {
+    public void save(ProductDto productDto) throws Exception {
+        if (!productDto.getImage().getContentType().startsWith("image/")) {
+            throw new IllegalArgumentException("Invalid image");
+        } else if (productDto.getPrice() < 0) {
+            throw new IllegalArgumentException("Invalid price");
+        }
+        String image = Base64.getEncoder()
+                .encodeToString(productDto.getImage().getBytes());
         Product product = new Product(productDto.getName(),
-                productDto.getDescription(),
-                productDto.getPrice());
+                productDto.getDescription(), productDto.getPrice(), image);
         productRepository.save(product);
     }
 

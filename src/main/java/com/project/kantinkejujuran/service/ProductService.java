@@ -6,7 +6,7 @@ import com.project.kantinkejujuran.model.Product;
 import java.util.List;
 
 public interface ProductService {
-    void save(ProductDto productDto);
+    void save(ProductDto productDto) throws Exception;
 
     void delete(String productId);
 
