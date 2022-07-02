@@ -7,11 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -35,14 +31,19 @@ public class Product {
     @Column(name = "price", nullable = false)
     private Integer price;
 
+    @Lob
+    @Column(name = "image", nullable = false)
+    private String image;
+
     @CreationTimestamp
     @Column(name = "date_created", nullable = false, updatable = false)
     private Date dateCreated;
 
-    public Product(String name, String description, Integer price) {
+    public Product(String name, String description, Integer price, String image) {
         this.name = name;
         this.description = description;
         this.price = price;
+        this.image = image;
     }
 
 }

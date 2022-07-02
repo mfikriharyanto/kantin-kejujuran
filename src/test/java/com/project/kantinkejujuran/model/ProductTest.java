@@ -15,7 +15,7 @@ public class ProductTest {
     @BeforeEach
     public void setUp() throws Exception {
         productClass = Class.forName("com.project.kantinkejujuran.model.Product");
-        product = new Product("Bakso", "Terbuat dari daging berkualitas", 10000);
+        product = new Product("Bakso", "Terbuat dari daging berkualitas", 10000, "2217");
     }
 
     @Test
@@ -48,13 +48,19 @@ public class ProductTest {
     }
 
     @Test
+    public void testGetImageShouldReturnCorrectly() {
+        String image = product.getImage();
+        assertEquals("2217", image);
+    }
+
+    @Test
     public void testGetCreatedDateShouldReturnCorrectly() {
         Date date = product.getDateCreated();
         assertNull(date);
     }
 
     @Test
-    void testSetIdShouldChangePassword() {
+    void testSetIdShouldChangeId() {
         product = new Product();
         product.setId("1234567890");
         String id = product.getId();
@@ -62,7 +68,7 @@ public class ProductTest {
     }
 
     @Test
-    void testSetNameShouldChangePassword() {
+    void testSetNameShouldChangeName() {
         product = new Product();
         product.setName("Sate");
         String name = product.getName();
@@ -70,7 +76,7 @@ public class ProductTest {
     }
 
     @Test
-    void testSetDescriptionShouldChangePassword() {
+    void testSetDescriptionShouldChangeDescription() {
         product = new Product();
         product.setDescription("Terbuat dari daging pilihan");
         String description = product.getDescription();
@@ -78,7 +84,7 @@ public class ProductTest {
     }
 
     @Test
-    void testSetPriceShouldChangePassword() {
+    void testSetPriceShouldChangePrice() {
         product = new Product();
         product.setPrice(15000);
         Integer price = product.getPrice();
@@ -86,7 +92,15 @@ public class ProductTest {
     }
 
     @Test
-    void testSetDateShouldChangePassword() {
+    void testSetImageShouldChangeImage() {
+        product = new Product();
+        product.setImage("1651");
+        String image = product.getImage();
+        assertEquals("1651", image);
+    }
+
+    @Test
+    void testSetDateShouldChangeDate() {
         Date currentDate = new Date();
         product = new Product();
         product.setDateCreated(currentDate);
