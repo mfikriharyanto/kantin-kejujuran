@@ -48,7 +48,7 @@ public class BalanceBoxTest {
     }
 
     @Test
-    void testSetIdShouldChangePassword() {
+    void testSetIdShouldChangeId() {
         balanceBox = new BalanceBox();
         balanceBox.setId("1234567890");
         String id = balanceBox.getId();
@@ -56,7 +56,7 @@ public class BalanceBoxTest {
     }
 
     @Test
-    void testSetChangeShouldChangePassword() {
+    void testSetChangeShouldChangeChange() {
         balanceBox = new BalanceBox();
         balanceBox.setChange(20000L);
         Long change = balanceBox.getChange();
@@ -64,7 +64,7 @@ public class BalanceBoxTest {
     }
 
     @Test
-    void testSetTotalShouldChangePassword() {
+    void testSetTotalShouldChangeTotal() {
         balanceBox = new BalanceBox();
         balanceBox.setTotal(20000L);
         Long total = balanceBox.getTotal();
@@ -72,7 +72,7 @@ public class BalanceBoxTest {
     }
 
     @Test
-    void testSetDateShouldChangePassword() {
+    void testSetDateShouldChangeDate() {
         Date currentDate = new Date();
         balanceBox = new BalanceBox();
         balanceBox.setDateCreated(currentDate);
