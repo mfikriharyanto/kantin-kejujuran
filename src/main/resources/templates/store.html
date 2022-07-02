@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store | Kantin Kejujuran</title>
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Image</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Created Date</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr th:each="product:${productList}">
+                <td th:text="${product.name}"></td>
+                <th>
+                    <img th:src="${'data:image/jpeg;base64,'+{product.image}}"
+                         style="width: 100px; height: 100px;">
+                </th>
+                <td th:text="${product.description}"></td>
+                <td th:text="${product.price}"></td>
+                <td th:text="${#dates.format(product.dateCreated, 'EEEE, dd MMMM yyyy')}"></td>
+                <td>
+                    <form th:action="@{/store/buy}" method="POST">
+                        <input type="hidden" name="productId" th:value="${product.id}">
+                        <button type="submit">Buy</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
