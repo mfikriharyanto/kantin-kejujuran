@@ -1,15 +1,22 @@
 package com.project.kantinkejujuran.controller;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import com.project.kantinkejujuran.dto.ProductDto;
+import com.project.kantinkejujuran.service.ProductServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -18,6 +25,12 @@ import org.springframework.web.context.WebApplicationContext;
 
 @SpringBootTest
 public class ProductControllerTest {
+
+    @MockBean
+    private ProductServiceImpl productService;
+
+    @InjectMocks
+    private ProductController productController;
 
     @Autowired
     private WebApplicationContext context;
@@ -73,7 +86,10 @@ public class ProductControllerTest {
     @Test
     @WithMockUser(roles = "USER")
     public void testPostAddProductPageWithLoggedUser() throws Exception {
-        mockMvc.perform(post("/store/add")
+        MockMultipartFile image = new MockMultipartFile("image", "test.png",
+                String.valueOf(MediaType.IMAGE_PNG), "image".getBytes());
+        mockMvc.perform(multipart("/store/add")
+                        .file(image)
                         .with(csrf())
                         .param("name", "Bakso")
                         .param("description", "Terbuat dari daging berkualitas")
@@ -82,6 +98,23 @@ public class ProductControllerTest {
                 .andExpect((handler().methodName("addProduct")))
                 .andExpect(view().name("redirect:/store"))
                 .andExpect(redirectedUrl("/store"));
+    }
+
+    @Test
+    @WithMockUser(roles = "USER")
+    public void testPostAddProductPageWithLoggedUserFailed() throws Exception {
+        doThrow(IllegalArgumentException.class).when(productService).save(any(ProductDto.class));
+        MockMultipartFile text = new MockMultipartFile("text", "test.txt",
+                String.valueOf(MediaType.TEXT_PLAIN), "text".getBytes());
+        mockMvc.perform(multipart("/store/add")
+                        .file(text)
+                        .with(csrf())
+                        .param("name", "Bakso")
+                        .param("description", "Terbuat dari daging berkualitas")
+                        .param("price", "100000"))
+                .andExpect(status().isOk())
+                .andExpect((handler().methodName("addProduct")))
+                .andExpect(view().name("add_product"));
     }
 
     @Test

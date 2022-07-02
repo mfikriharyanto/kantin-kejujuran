@@ -31,9 +31,14 @@ public class ProductController {
     }
 
     @PostMapping("/add")
-    public String addProduct(@ModelAttribute("user") ProductDto productDto) {
-        productService.save(productDto);
-        return "redirect:/store";
+    public String addProduct(Model model, @ModelAttribute("user") ProductDto productDto) {
+        try {
+            productService.save(productDto);
+            return "redirect:/store";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "add_product";
+        }
     }
 
     @PostMapping("/buy")
