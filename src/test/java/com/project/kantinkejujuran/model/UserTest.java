@@ -104,7 +104,7 @@ class UserTest {
     }
 
     @Test
-    void testSetRoleShouldChangePassword() {
+    void testSetRoleShouldChangeRole() {
         user = new User();
         user.setRole(Role.ADMIN);
         Role role = user.getRole();
