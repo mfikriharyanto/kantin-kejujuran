@@ -80,13 +80,20 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void testDeleteProductById() {
+    public void testDeleteProductById() throws Exception {
         Optional<Product> productOptional = Optional.of(product);
         when(productRepository.findById(anyString())).thenReturn(productOptional);
-
         productService.delete("1234567890");
-
         verify(productRepository, times(1)).delete(any(Product.class));
+    }
+
+    @Test
+    public void testDeleteProductByIdFailed() {
+        Exception thrown = assertThrows(Exception.class, () -> {
+            productService.delete("1234567890");
+        });
+        assertEquals(thrown.getMessage(),"Invalid id");
+        verify(productRepository, times(0)).delete(any(Product.class));
     }
 
     @Test

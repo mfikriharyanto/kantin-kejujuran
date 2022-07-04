@@ -119,23 +119,33 @@ public class ProductControllerTest {
 
     @Test
     @WithAnonymousUser
-    public void testGetBuyProductWithAnonymousUser() throws Exception {
+    public void testPostBuyProductWithAnonymousUser() throws Exception {
         mockMvc.perform(post("/store/buy")
                         .with(csrf())
-                        .param("productId", "1234567890"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("1234567890"))
                 .andExpect(status().is(302));
     }
 
     @Test
     @WithMockUser(roles = "USER")
-    public void testGetBuyProductWithLoggedUser() throws Exception {
+    public void testPostBuyProductWithLoggedUser() throws Exception {
         mockMvc.perform(post("/store/buy")
                         .with(csrf())
-                        .param("productId", "1234567890"))
-                .andExpect(status().is(302))
-                .andExpect((handler().methodName("buyProduct")))
-                .andExpect(view().name("redirect:/store"))
-                .andExpect(redirectedUrl("/store"));
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("1234567890"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(roles = "USER")
+    public void testPostBuyProductWithLoggedUserFailed() throws Exception {
+        doThrow(Exception.class).when(productService).delete(any(String.class));
+        mockMvc.perform(post("/store/buy")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("1234567890"))
+                .andExpect(status().isBadRequest());
     }
 
 }
