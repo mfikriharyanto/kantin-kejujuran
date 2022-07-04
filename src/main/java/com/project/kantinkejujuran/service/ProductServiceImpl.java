@@ -30,11 +30,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void delete(String productId) {
+    public void delete(String productId) throws Exception {
         Product product = this.getProductById(productId);
-        if (product != null) {
-            productRepository.delete(product);
+        if (product == null) {
+            throw new Exception("Invalid id");
         }
+        productRepository.delete(product);
     }
 
     @Override

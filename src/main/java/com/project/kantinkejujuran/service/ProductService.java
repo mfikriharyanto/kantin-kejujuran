@@ -8,7 +8,7 @@ import java.util.List;
 public interface ProductService {
     void save(ProductDto productDto) throws Exception;
 
-    void delete(String productId);
+    void delete(String productId) throws Exception;
 
     List<Product> getAllProduct();
     
