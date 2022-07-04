@@ -4,6 +4,8 @@ import com.project.kantinkejujuran.dto.ProductDto;
 import com.project.kantinkejujuran.model.Product;
 import com.project.kantinkejujuran.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -41,10 +43,15 @@ public class ProductController {
         }
     }
 
-    @PostMapping("/buy")
-    public String buyProduct(@ModelAttribute("productId") String productId) {
-        productService.delete(productId);
-        return "redirect:/store";
+    @PostMapping(path = "/buy", produces = {"application/json"})
+    @ResponseBody
+    public ResponseEntity buyProduct(@RequestBody String productId) {
+        try {
+            productService.delete(productId);
+        } catch (Exception e) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity(HttpStatus.OK);
     }
 
 }
