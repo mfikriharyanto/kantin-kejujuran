@@ -1,12 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/main.css"/>
     <title>Kantin Kejujuran</title>
 </head>
-<body>
+<body class="flex items-center justify-center min-h-screen bg-gradient-to-bl from-indigo-800 via-indigo-400 to-indigo-900">
+    <nav class="fixed bg-indigo-800 bg-opacity-40 top-0 w-full shadow">
+        <div class="container m-auto flex justify-between items-center text-gray-700">
+            <div class="w-48 flex justify-start mx-4">
+                <a href="/" class="py-3 text-xl text-white text-center font-bold">Kantin Kejujuran</a>
+            </div>
+            <div class="w-96 flex justify-evenly hidden md:flex font-semibold">
+                <a href="/store"><button class="rounded-lg w-40 hover:bg-indigo-700 hover:shadow-lg py-2 px-6 text-white text-center">The Store</button></a>
+                <a href="/balance-box"><button class="rounded-lg w-40 hover:bg-indigo-700 hover:shadow-lg py-2 px-6 text-white text-center">Balance Box</button></a>
+            </div>
+            <div sec:authorize="isAuthenticated()" class="w-48 flex justify-end mx-4">
+                <button class="py-3 px-4 mx-2 rounded focus:outline-none bg-white hover:bg-indigo-600 hover:shadow-lg group"> 
+                    <div class="absolute rounded-lg top-0 my-1.5 -right-full h-fit md:w-1/5 w-2/5 bg-white transition-all duration-300 group-focus:right-0 focus-within:right-0">
+                        <ul class="flex flex-col items-center w-full text-base font-semibold">
+                            <a href="/store" class="md:hidden rounded hover:text-white hover:bg-indigo-500 py-2 px-6 w-full">The Store</a>
+                            <a href="/balance-box" class="md:hidden rounded hover:text-white hover:bg-indigo-500 py-2 px-6 w-full">Balance Box</a>
+                            <a href="/logout" class="rounded hover:text-white hover:bg-red-500 py-2 px-6 w-full">Logout</a>
+                        </ul>
+                    </div>
+                </button>
+            </div>
+            <div sec:authorize="!isAuthenticated()" class="w-48 md:invisible flex justify-end mx-4">
+                <button class="py-3 px-4 mx-2 rounded focus:outline-none bg-white hover:bg-indigo-600 hover:shadow-lg group"> 
+                    <div class="absolute rounded-lg top-0 my-1.5 -right-full h-fit md:w-1/5 w-2/5 bg-white transition-all duration-300 group-focus:right-0 focus-within:right-0">
+                        <ul class="flex flex-col items-center w-full text-base font-semibold">
+                            <a href="/store" class="md:hidden rounded hover:text-white hover:bg-indigo-500 py-2 px-6 w-full">The Store</a>
+                            <a href="/balance-box" class="md:hidden rounded hover:text-white hover:bg-indigo-500 py-2 px-6 w-full">Balance Box</a>
+                        </ul>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </nav>
     
+    <div class="mx-auto px-8">
+        <h1 class="text-4xl md:text-6xl font-bold text-white text-center">Kantin Kejujuran</h1>
+        <div sec:authorize="!isAuthenticated()" class="flex flex-col md:flex-row justify-center items-center my-2 md:my-4">
+            <a href="/registration" class="my-2 mx-6"><button class="font-semibold rounded-lg w-40 bg-indigo-600 hover:bg-indigo-700 hover:shadow-xl py-1.5 px-6 text-white text-center">Register</button></a>
+            <a href="/login" class="my-2 mx-6"><button class="font-semibold rounded-lg w-40 bg-white hover:bg-indigo-700 hover:shadow-xl py-1.5 px-6 text-indigo-600 hover:text-white text-center">Login</button></a>
+        </div>
+    </div>
 </body>
 </html>
