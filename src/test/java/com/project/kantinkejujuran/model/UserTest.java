@@ -18,18 +18,18 @@ class UserTest {
     private User user;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() throws Exception {
         userClass = Class.forName("com.project.kantinkejujuran.model.User");
         user = new User("12345", "12345", Role.USER);
     }
 
     @Test
-    public void testUserIsConcreteClass() {
+    void testUserIsConcreteClass() {
         assertFalse(Modifier.isAbstract(userClass.getModifiers()));
     }
 
     @Test
-    public void testUserItemIsAUserDetails() {
+    void testUserItemIsAUserDetails() {
         Collection<Type> interfaces = Arrays.asList(userClass.getInterfaces());
 
         assertTrue(interfaces.stream().anyMatch(type -> type.getTypeName()
@@ -44,51 +44,51 @@ class UserTest {
     }
 
     @Test
-    public void testGetUsernameShouldReturnCorrectly() {
+    void testGetUsernameShouldReturnCorrectly() {
         String username = user.getUsername();
         assertEquals("12345", username);
     }
 
     @Test
-    public void testIsAccountNonExpired() {
+    void testIsAccountNonExpired() {
         assertTrue(user.isAccountNonExpired());
     }
 
     @Test
-    public void testIsAccountNonLocked() {
+    void testIsAccountNonLocked() {
         assertTrue(user.isAccountNonLocked());
     }
 
     @Test
-    public void testIsCredentialsNonExpired() {
+    void testIsCredentialsNonExpired() {
         assertTrue(user.isCredentialsNonExpired());
     }
 
     @Test
-    public void testIsEnabled() {
+    void testIsEnabled() {
         assertTrue(user.isEnabled());
     }
 
     @Test
-    public void testGetIdShouldReturnCorrectly() {
+    void testGetIdShouldReturnCorrectly() {
         String id = user.getId();
         assertEquals("12345", id);
     }
 
     @Test
-    public void testGetPasswordShouldReturnCorrectly() {
+    void testGetPasswordShouldReturnCorrectly() {
         String password = user.getPassword();
         assertEquals("12345", password);
     }
 
     @Test
-    public void testGetRoleShouldReturnCorrectly() {
+    void testGetRoleShouldReturnCorrectly() {
         Role role = user.getRole();
         assertEquals(Role.USER, role);
     }
 
     @Test
-    public void testSetIdShouldChangeId() {
+    void testSetIdShouldChangeId() {
         user = new User();
         user.setId("54321");
         String id = user.getId();
@@ -104,7 +104,7 @@ class UserTest {
     }
 
     @Test
-    void testSetRoleShouldChangePassword() {
+    void testSetRoleShouldChangeRole() {
         user = new User();
         user.setRole(Role.ADMIN);
         Role role = user.getRole();

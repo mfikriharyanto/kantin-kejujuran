@@ -1,8 +1,6 @@
 package com.project.kantinkejujuran.controller;
 
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,10 +15,10 @@ public class MainController {
 
     @GetMapping("/login")
     public String login() {
-        SecurityContext securityContext = SecurityContextHolder.getContext();
-        Authentication authentication = securityContext.getAuthentication();
+        var securityContext = SecurityContextHolder.getContext();
+        var authentication = securityContext.getAuthentication();
 
-        if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
+        if (authentication instanceof AnonymousAuthenticationToken) {
             return "login";
         }
  
