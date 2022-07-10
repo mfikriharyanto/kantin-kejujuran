@@ -6,8 +6,10 @@ import com.project.kantinkejujuran.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -16,24 +18,26 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
 
     @Override
-    public void save(ProductDto productDto) throws Exception {
-        if (!productDto.getImage().getContentType().startsWith("image/")) {
+    public void save(ProductDto productDto) throws IOException, IllegalArgumentException {
+        String contentType = Objects.requireNonNull(productDto.getImage().getContentType());
+        if (!contentType.startsWith("image/")) {
             throw new IllegalArgumentException("Invalid image");
         } else if (productDto.getPrice() < 0) {
             throw new IllegalArgumentException("Invalid price");
         }
-        String image = Base64.getEncoder()
+
+        var image = Base64.getEncoder()
                 .encodeToString(productDto.getImage().getBytes());
-        Product product = new Product(productDto.getName(),
+        var product = new Product(productDto.getName(),
                 productDto.getDescription(), productDto.getPrice(), image);
         productRepository.save(product);
     }
 
     @Override
-    public void delete(String productId) throws Exception {
-        Product product = this.getProductById(productId);
+    public void delete(String productId) throws IllegalArgumentException {
+        var product = this.getProductById(productId);
         if (product == null) {
-            throw new Exception("Invalid id");
+            throw new IllegalArgumentException("Invalid id");
         }
         productRepository.delete(product);
     }

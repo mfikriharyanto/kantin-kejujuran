@@ -8,53 +8,53 @@ import org.junit.jupiter.api.Test;
 import java.lang.reflect.Modifier;
 import java.util.Date;
 
-public class ProductTest {
+class ProductTest {
     private Class<?> productClass;
     private Product product;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() throws Exception {
         productClass = Class.forName("com.project.kantinkejujuran.model.Product");
         product = new Product("Bakso", "Terbuat dari daging berkualitas", 10000, "2217");
     }
 
     @Test
-    public void testUserIsConcreteClass() {
+    void testUserIsConcreteClass() {
         assertFalse(Modifier.isAbstract(productClass.getModifiers()));
     }
 
     @Test
-    public void testGetIdShouldReturnCorrectly() {
+    void testGetIdShouldReturnCorrectly() {
         String id = product.getId();
         assertNull(id);
     }
 
     @Test
-    public void testGetNameShouldReturnCorrectly() {
+    void testGetNameShouldReturnCorrectly() {
         String name = product.getName();
         assertEquals("Bakso", name);
     }
 
     @Test
-    public void testGetDescriptionShouldReturnCorrectly() {
+    void testGetDescriptionShouldReturnCorrectly() {
         String description = product.getDescription();
         assertEquals("Terbuat dari daging berkualitas", description);
     }
 
     @Test
-    public void testGetPriceShouldReturnCorrectly() {
+    void testGetPriceShouldReturnCorrectly() {
         Integer price = product.getPrice();
         assertEquals(10000, price);
     }
 
     @Test
-    public void testGetImageShouldReturnCorrectly() {
+    void testGetImageShouldReturnCorrectly() {
         String image = product.getImage();
         assertEquals("2217", image);
     }
 
     @Test
-    public void testGetCreatedDateShouldReturnCorrectly() {
+    void testGetCreatedDateShouldReturnCorrectly() {
         Date date = product.getDateCreated();
         assertNull(date);
     }
