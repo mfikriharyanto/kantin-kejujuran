@@ -14,7 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class BalanceBoxServiceTest {
+class BalanceBoxServiceTest {
     @Mock
     private BalanceBoxRepository balanceBoxRepository;
 
@@ -24,12 +24,12 @@ public class BalanceBoxServiceTest {
     private BalanceBox balanceBox;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         balanceBox = new BalanceBox(10000L, 10000L);
     }
 
     @Test
-    public void testAddBalanceBox() {
+    void testAddBalanceBox() {
         when(balanceBoxRepository.findCount()).thenReturn(1);
         when(balanceBoxRepository.findLast()).thenReturn(balanceBox);
 
@@ -39,17 +39,17 @@ public class BalanceBoxServiceTest {
     }
 
     @Test
-    public void testAddBalanceBoxWithNegativeNumber() {
+    void testAddBalanceBoxWithNegativeNumber() {
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
             balanceBoxService.add(-10000L);
         });
-        assertEquals(thrown.getMessage(),"Invalid input");
+        assertEquals("Invalid input", thrown.getMessage());
 
         verify(balanceBoxRepository, times(0)).save(any(BalanceBox.class));
     }
 
     @Test
-    public void testWithdrawnBalanceBox() {
+    void testWithdrawnBalanceBox() {
         when(balanceBoxRepository.findCount()).thenReturn(1);
         when(balanceBoxRepository.findLast()).thenReturn(balanceBox);
 
@@ -59,33 +59,33 @@ public class BalanceBoxServiceTest {
     }
 
     @Test
-    public void testWithdrawnBalanceBoxWithNegativeNumber() {
+    void testWithdrawnBalanceBoxWithNegativeNumber() {
         when(balanceBoxRepository.findCount()).thenReturn(1);
         when(balanceBoxRepository.findLast()).thenReturn(balanceBox);
 
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
             balanceBoxService.withdraw(-10000L);
         });
-        assertEquals(thrown.getMessage(),"Invalid input");
+        assertEquals("Invalid input", thrown.getMessage());
 
         verify(balanceBoxRepository, times(0)).save(any(BalanceBox.class));
     }
 
     @Test
-    public void testWithdrawnBalanceBoxLessTotal() {
+    void testWithdrawnBalanceBoxLessTotal() {
         when(balanceBoxRepository.findCount()).thenReturn(1);
         when(balanceBoxRepository.findLast()).thenReturn(balanceBox);
 
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
             balanceBoxService.withdraw(20000L);
         });
-        assertEquals(thrown.getMessage(),"Invalid input");
+        assertEquals("Invalid input", thrown.getMessage());
 
         verify(balanceBoxRepository, times(0)).save(any(BalanceBox.class));
     }
 
     @Test
-    public void testGetLastTotal() {
+    void testGetLastTotal() {
         when(balanceBoxRepository.findCount()).thenReturn(1);
         when(balanceBoxRepository.findLast()).thenReturn(balanceBox);
 
@@ -97,7 +97,7 @@ public class BalanceBoxServiceTest {
     }
 
     @Test
-    public void testGetLastTotalEmpty() {
+    void testGetLastTotalEmpty() {
         when(balanceBoxRepository.findCount()).thenReturn(0);
 
         Long total = balanceBoxService.getLastTotal();
