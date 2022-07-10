@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 @SpringBootTest
-public class CustomErrorControllerTest {
+class CustomErrorControllerTest {
 
     @Autowired
     private WebApplicationContext context;
@@ -22,7 +22,7 @@ public class CustomErrorControllerTest {
     private MockMvc mockMvc;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(context)
                 .apply(springSecurity())
@@ -31,7 +31,7 @@ public class CustomErrorControllerTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    public void testGetErrorPageShouldReturnErrorPage() throws Exception {
+    void testGetErrorPageShouldReturnErrorPage() throws Exception {
         mockMvc.perform(get("/error"))
                 .andExpect(status().isOk())
                 .andExpect((handler().methodName("handleError")))

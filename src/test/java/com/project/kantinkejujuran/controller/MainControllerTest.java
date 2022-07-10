@@ -15,7 +15,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 @SpringBootTest
-public class MainControllerTest {
+class MainControllerTest {
 
     @Autowired
     private WebApplicationContext context;
@@ -23,7 +23,7 @@ public class MainControllerTest {
     private MockMvc mockMvc;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(context)
                 .apply(springSecurity())
@@ -31,7 +31,7 @@ public class MainControllerTest {
     }
 
     @Test
-    public void testGetHomePageShouldReturnHomePage() throws Exception {
+    void testGetHomePageShouldReturnHomePage() throws Exception {
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
                 .andExpect((handler().methodName("homepage")))
@@ -40,7 +40,7 @@ public class MainControllerTest {
 
     @Test
     @WithAnonymousUser
-    public void testGetLoginShouldReturnLoginPage() throws Exception {
+    void testGetLoginShouldReturnLoginPage() throws Exception {
         mockMvc.perform(get("/login"))
                 .andExpect(status().isOk())
                 .andExpect((handler().methodName("login")))
@@ -49,7 +49,7 @@ public class MainControllerTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    public void testGetLoginShouldRedirectToHomePage() throws Exception {
+    void testGetLoginShouldRedirectToHomePage() throws Exception {
         mockMvc.perform(get("/login"))
                 .andExpect(status().is(302))
                 .andExpect((handler().methodName("login")))

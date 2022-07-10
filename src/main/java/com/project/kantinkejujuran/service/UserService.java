@@ -5,7 +5,7 @@ import com.project.kantinkejujuran.model.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface UserService extends UserDetailsService {
-    void save(UserDto userDto) throws Exception;
+    void save(UserDto userDto) throws IllegalArgumentException;
 
     Boolean validateUserId(String userId) throws IllegalArgumentException;
 

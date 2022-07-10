@@ -23,7 +23,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 @SpringBootTest
-public class UserControllerTest {
+class UserControllerTest {
 
     @SpyBean
     private UserServiceImpl userService;
@@ -37,7 +37,7 @@ public class UserControllerTest {
     private MockMvc mockMvc;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(context)
                 .apply(springSecurity())
@@ -46,7 +46,7 @@ public class UserControllerTest {
 
     @Test
     @WithAnonymousUser
-    public void testGetRegisterShouldReturnRegisterPage() throws Exception {
+    void testGetRegisterShouldReturnRegisterPage() throws Exception {
         mockMvc.perform(get("/registration"))
                 .andExpect(status().isOk())
                 .andExpect((handler().methodName("registerUser")))
@@ -56,7 +56,7 @@ public class UserControllerTest {
 
     @Test
     @WithAnonymousUser
-    public void testPostRegisterItShouldAddNewUser() throws Exception {
+    void testPostRegisterItShouldAddNewUser() throws Exception {
         mockMvc.perform(post("/registration")
                         .with(csrf())
                         .param("id", "12306")
@@ -70,7 +70,7 @@ public class UserControllerTest {
 
     @Test
     @WithAnonymousUser
-    public void testPostRegisterItShouldFailed() throws Exception {
+    void testPostRegisterItShouldFailed() throws Exception {
         assertThrows(Exception.class, () -> userService.save(any(UserDto.class)));
         mockMvc.perform(post("/registration")
                         .with(csrf())
@@ -85,7 +85,7 @@ public class UserControllerTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    public void testGetRegisterWithLoggedUser() throws Exception {
+    void testGetRegisterWithLoggedUser() throws Exception {
         mockMvc.perform(get("/registration"))
                 .andExpect(status().isForbidden());
     }
