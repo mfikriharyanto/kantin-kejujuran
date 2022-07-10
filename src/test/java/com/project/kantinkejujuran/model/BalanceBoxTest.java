@@ -8,41 +8,41 @@ import org.junit.jupiter.api.Test;
 import java.lang.reflect.Modifier;
 import java.util.Date;
 
-public class BalanceBoxTest {
+class BalanceBoxTest {
     private Class<?> balanceBoxClass;
     private BalanceBox balanceBox;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() throws Exception {
         balanceBoxClass = Class.forName("com.project.kantinkejujuran.model.BalanceBox");
         balanceBox = new BalanceBox(10000L, 10000L);
     }
 
     @Test
-    public void testUserIsConcreteClass() {
+    void testUserIsConcreteClass() {
         assertFalse(Modifier.isAbstract(balanceBoxClass.getModifiers()));
     }
 
     @Test
-    public void testGetIdShouldReturnCorrectly() {
+    void testGetIdShouldReturnCorrectly() {
         String id = balanceBox.getId();
         assertNull(id);
     }
 
     @Test
-    public void testGetChangeShouldReturnCorrectly() {
+    void testGetChangeShouldReturnCorrectly() {
         Long change = balanceBox.getChange();
         assertEquals(10000L, change);
     }
 
     @Test
-    public void testGetTotalShouldReturnCorrectly() {
+    void testGetTotalShouldReturnCorrectly() {
         Long total = balanceBox.getTotal();
         assertEquals(10000L, total);
     }
 
     @Test
-    public void testGetCreatedDateShouldReturnCorrectly() {
+    void testGetCreatedDateShouldReturnCorrectly() {
         Date date = balanceBox.getDateCreated();
         assertNull(date);
     }

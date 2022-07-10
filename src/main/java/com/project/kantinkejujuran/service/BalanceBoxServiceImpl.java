@@ -17,7 +17,7 @@ public class BalanceBoxServiceImpl implements BalanceBoxService {
             throw new IllegalArgumentException("Invalid input");
         }
         Long lastTotal = this.getLastTotal();
-        BalanceBox balanceBox = new BalanceBox(change, lastTotal + change);
+        var balanceBox = new BalanceBox(change, lastTotal + change);
         balanceBoxRepository.save(balanceBox);
     }
 
@@ -27,7 +27,7 @@ public class BalanceBoxServiceImpl implements BalanceBoxService {
         if (lastTotal < change || change < 0) {
             throw new IllegalArgumentException("Invalid input");
         }
-        BalanceBox balanceBox = new BalanceBox(-1 * change, lastTotal - change);
+        var balanceBox = new BalanceBox(-1 * change, lastTotal - change);
         balanceBoxRepository.save(balanceBox);
     }
 
@@ -36,7 +36,7 @@ public class BalanceBoxServiceImpl implements BalanceBoxService {
         if (balanceBoxRepository.findCount() == 0) {
             return 0L;
         }
-        BalanceBox lastBalanceBox = balanceBoxRepository.findLast();
+        var lastBalanceBox = balanceBoxRepository.findLast();
         return lastBalanceBox.getTotal();
     }
 }

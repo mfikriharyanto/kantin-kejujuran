@@ -23,7 +23,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 @SpringBootTest
-public class BalanceBoxControllerTest {
+class BalanceBoxControllerTest {
 
     @SpyBean
     private BalanceBoxServiceImpl balanceBoxService;
@@ -37,7 +37,7 @@ public class BalanceBoxControllerTest {
     private MockMvc mockMvc;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(context)
                 .apply(springSecurity())
@@ -46,14 +46,14 @@ public class BalanceBoxControllerTest {
 
     @Test
     @WithAnonymousUser
-    public void testGetBalanceBoxPageShouldRedirect() throws Exception {
+    void testGetBalanceBoxPageShouldRedirect() throws Exception {
         mockMvc.perform(get("/balance-box"))
                 .andExpect(status().is(302));
     }
 
     @Test
     @WithAnonymousUser
-    public void testGetAddBalanceBoxPageShouldRedirect() throws Exception {
+    void testGetAddBalanceBoxPageShouldRedirect() throws Exception {
         mockMvc.perform(post("/balance-box/add")
                         .with(csrf())
                         .param("change", "10000"))
@@ -62,7 +62,7 @@ public class BalanceBoxControllerTest {
 
     @Test
     @WithAnonymousUser
-    public void testGetWithdrawBalanceBoxPageShouldRedirect() throws Exception {
+    void testGetWithdrawBalanceBoxPageShouldRedirect() throws Exception {
         mockMvc.perform(post("/balance-box/withdraw")
                         .with(csrf())
                         .param("change", "10000"))
@@ -71,7 +71,7 @@ public class BalanceBoxControllerTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    public void testGetBalanceBoxPageSuccess() throws Exception {
+    void testGetBalanceBoxPageSuccess() throws Exception {
         mockMvc.perform(get("/balance-box"))
                 .andExpect(status().isOk())
                 .andExpect((handler().methodName("balanceBox")))
@@ -81,7 +81,7 @@ public class BalanceBoxControllerTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    public void testPostAddBalanceBoxSuccess() throws Exception {
+    void testPostAddBalanceBoxSuccess() throws Exception {
         mockMvc.perform(post("/balance-box/add")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -91,7 +91,7 @@ public class BalanceBoxControllerTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    public void testPostAddBalanceBoxWithNegativeNumber() throws Exception {
+    void testPostAddBalanceBoxWithNegativeNumber() throws Exception {
         mockMvc.perform(post("/balance-box/add")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -101,7 +101,7 @@ public class BalanceBoxControllerTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    public void testPostWithdrawBalanceBoxSuccess() throws Exception {
+    void testPostWithdrawBalanceBoxSuccess() throws Exception {
         when(balanceBoxService.getLastTotal()).thenReturn(20000L);
         mockMvc.perform(post("/balance-box/withdraw")
                         .with(csrf())
@@ -112,7 +112,7 @@ public class BalanceBoxControllerTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    public void testPostWithdrawBalanceBoxWithNegativeNumber() throws Exception {
+    void testPostWithdrawBalanceBoxWithNegativeNumber() throws Exception {
         mockMvc.perform(post("/balance-box/withdraw")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -122,7 +122,7 @@ public class BalanceBoxControllerTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    public void testPostWithdrawBalanceBoxLessTotal() throws Exception {
+    void testPostWithdrawBalanceBoxLessTotal() throws Exception {
         when(balanceBoxService.getLastTotal()).thenReturn(5000L);
         mockMvc.perform(post("/balance-box/withdraw")
                         .with(csrf())
