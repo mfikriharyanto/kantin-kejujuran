@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
-public class ProductServiceTest {
+class ProductServiceTest {
     @Mock
     private ProductRepository productRepository;
 
@@ -30,12 +30,12 @@ public class ProductServiceTest {
     private Product product;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         product = new Product("Sate", "Terbuat dari daging pilihan", 10000, "");
     }
 
     @Test
-    public void testSaveProductSuccess() throws Exception {
+    void testSaveProductSuccess() throws Exception {
         MockMultipartFile image = new MockMultipartFile("image", "test.png",
                 String.valueOf(MediaType.IMAGE_PNG), "image".getBytes());
 
@@ -52,7 +52,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void testSaveProductInvalidPrice() {
+    void testSaveProductInvalidPrice() {
         MockMultipartFile image = new MockMultipartFile("image", "test.png",
                 String.valueOf(MediaType.IMAGE_PNG), "image".getBytes());
 
@@ -61,12 +61,12 @@ public class ProductServiceTest {
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
             productService.save(productDto);
         });
-        assertEquals(thrown.getMessage(),"Invalid price");
+        assertEquals("Invalid price", thrown.getMessage());
         verify(productRepository, times(0)).save(any(Product.class));
     }
 
     @Test
-    public void testSaveProductInvalidImage() {
+    void testSaveProductInvalidImage() {
         MockMultipartFile text = new MockMultipartFile("text", "test.txt",
                 String.valueOf(MediaType.TEXT_PLAIN), "text".getBytes());
 
@@ -75,12 +75,12 @@ public class ProductServiceTest {
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
             productService.save(productDto);
         });
-        assertEquals(thrown.getMessage(),"Invalid image");
+        assertEquals("Invalid image", thrown.getMessage());
         verify(productRepository, times(0)).save(any(Product.class));
     }
 
     @Test
-    public void testDeleteProductById() throws Exception {
+    void testDeleteProductById() throws Exception {
         Optional<Product> productOptional = Optional.of(product);
         when(productRepository.findById(anyString())).thenReturn(productOptional);
         productService.delete("1234567890");
@@ -88,16 +88,16 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void testDeleteProductByIdFailed() {
+    void testDeleteProductByIdFailed() {
         Exception thrown = assertThrows(Exception.class, () -> {
             productService.delete("1234567890");
         });
-        assertEquals(thrown.getMessage(),"Invalid id");
+        assertEquals("Invalid id", thrown.getMessage());
         verify(productRepository, times(0)).delete(any(Product.class));
     }
 
     @Test
-    public void testGetAllProduct() {
+    void testGetAllProduct() {
         when(productRepository.findAll()).thenReturn(List.of(product));
 
         List<Product> productList = productService.getAllProduct();
@@ -108,13 +108,13 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void testGetProductByIdNotFound() {
+    void testGetProductByIdNotFound() {
         Product product = productService.getProductById("1234567890");
         assertNull(product);
     }
 
     @Test
-    public void testGetProductByIdFound() {
+    void testGetProductByIdFound() {
         Optional<Product> productOptional = Optional.of(product);
         when(productRepository.findById(anyString())).thenReturn(productOptional);
         Product productTest = productService.getProductById("1234567890");

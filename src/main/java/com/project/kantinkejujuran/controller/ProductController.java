@@ -45,13 +45,13 @@ public class ProductController {
 
     @PostMapping(path = "/buy", produces = {"application/json"})
     @ResponseBody
-    public ResponseEntity buyProduct(@RequestBody String productId) {
+    public ResponseEntity<String> buyProduct(@RequestBody String productId) {
         try {
             productService.delete(productId);
         } catch (Exception e) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

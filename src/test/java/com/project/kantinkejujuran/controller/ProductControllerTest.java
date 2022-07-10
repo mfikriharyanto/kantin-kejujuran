@@ -24,7 +24,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 @SpringBootTest
-public class ProductControllerTest {
+class ProductControllerTest {
 
     @MockBean
     private ProductServiceImpl productService;
@@ -38,7 +38,7 @@ public class ProductControllerTest {
     private MockMvc mockMvc;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         mockMvc = MockMvcBuilders
                 .webAppContextSetup(context)
                 .apply(springSecurity())
@@ -47,7 +47,7 @@ public class ProductControllerTest {
 
     @Test
     @WithAnonymousUser
-    public void testGetStorePageShouldReturnStorePage() throws Exception {
+    void testGetStorePageShouldReturnStorePage() throws Exception {
         mockMvc.perform(get("/store"))
                 .andExpect(status().isOk())
                 .andExpect((handler().methodName("store")))
@@ -57,14 +57,14 @@ public class ProductControllerTest {
 
     @Test
     @WithAnonymousUser
-    public void testGetAddProductPageShouldRedirect() throws Exception {
+    void testGetAddProductPageShouldRedirect() throws Exception {
         mockMvc.perform(get("/store/add"))
                 .andExpect(status().is(302));
     }
 
     @Test
     @WithMockUser(roles = "USER")
-    public void testGetAddProductPageShouldReturnAddProductPage() throws Exception {
+    void testGetAddProductPageShouldReturnAddProductPage() throws Exception {
         mockMvc.perform(get("/store/add"))
                 .andExpect(status().isOk())
                 .andExpect((handler().methodName("addProduct")))
@@ -74,7 +74,7 @@ public class ProductControllerTest {
 
     @Test
     @WithAnonymousUser
-    public void testPostAddProductPageShouldRedirect() throws Exception {
+    void testPostAddProductPageShouldRedirect() throws Exception {
         mockMvc.perform(post("/store/add")
                         .with(csrf())
                         .param("name", "Bakso")
@@ -85,7 +85,7 @@ public class ProductControllerTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    public void testPostAddProductPageWithLoggedUser() throws Exception {
+    void testPostAddProductPageWithLoggedUser() throws Exception {
         MockMultipartFile image = new MockMultipartFile("image", "test.png",
                 String.valueOf(MediaType.IMAGE_PNG), "image".getBytes());
         mockMvc.perform(multipart("/store/add")
@@ -102,7 +102,7 @@ public class ProductControllerTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    public void testPostAddProductPageWithLoggedUserFailed() throws Exception {
+    void testPostAddProductPageWithLoggedUserFailed() throws Exception {
         doThrow(IllegalArgumentException.class).when(productService).save(any(ProductDto.class));
         MockMultipartFile text = new MockMultipartFile("text", "test.txt",
                 String.valueOf(MediaType.TEXT_PLAIN), "text".getBytes());
@@ -119,7 +119,7 @@ public class ProductControllerTest {
 
     @Test
     @WithAnonymousUser
-    public void testPostBuyProductWithAnonymousUser() throws Exception {
+    void testPostBuyProductWithAnonymousUser() throws Exception {
         mockMvc.perform(post("/store/buy")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -129,7 +129,7 @@ public class ProductControllerTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    public void testPostBuyProductWithLoggedUser() throws Exception {
+    void testPostBuyProductWithLoggedUser() throws Exception {
         mockMvc.perform(post("/store/buy")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -139,8 +139,8 @@ public class ProductControllerTest {
 
     @Test
     @WithMockUser(roles = "USER")
-    public void testPostBuyProductWithLoggedUserFailed() throws Exception {
-        doThrow(Exception.class).when(productService).delete(any(String.class));
+    void testPostBuyProductWithLoggedUserFailed() throws Exception {
+        doThrow(IllegalArgumentException.class).when(productService).delete(any(String.class));
         mockMvc.perform(post("/store/buy")
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
