@@ -20,15 +20,15 @@ public class UserServiceImpl implements UserService {
     private BCryptPasswordEncoder bcryptPasswordEncoder;
 
     @Override
-    public void save(UserDto userDto) throws Exception {
+    public void save(UserDto userDto) throws IllegalArgumentException {
         Boolean correctUserId = validateUserId(userDto.getId());
-        if (!correctUserId) {
-            throw new Exception("ID is not valid");
+        if (Boolean.FALSE.equals(correctUserId)) {
+            throw new IllegalArgumentException("ID is not valid");
         }
 
-        User user = getUserById(userDto.getId());
+        var user = getUserById(userDto.getId());
         if (user != null) {
-            throw new Exception("ID is already registered");
+            throw new IllegalArgumentException("ID is already registered");
         }
 
         user = new User(userDto.getId(),
@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        User user = getUserById(userId);
+        var user = getUserById(userId);
         if (user == null) {
             throw new UsernameNotFoundException("Invalid ID or password");
         }
@@ -50,13 +50,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public Boolean validateUserId(String userId) throws IllegalArgumentException {
         try {
-            int userIdInteger = Integer.parseInt(userId);
+            var userIdInteger = Integer.parseInt(userId);
 
             if (userId.length() != 5) {
                 throw new IllegalArgumentException("ID should consist of a 5 digits number");
             }
 
-            int sumOfFirstThreeDigits = 0;
+            var sumOfFirstThreeDigits = 0;
             int twoLastDigits = userIdInteger % 100;
 
             userIdInteger /= 100;

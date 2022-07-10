@@ -8,14 +8,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 @SpringBootTest
-class MainControllerTest {
+class CustomErrorControllerTest {
 
     @Autowired
     private WebApplicationContext context;
@@ -31,29 +30,11 @@ class MainControllerTest {
     }
 
     @Test
-    void testGetHomePageShouldReturnHomePage() throws Exception {
-        mockMvc.perform(get("/"))
-                .andExpect(status().isOk())
-                .andExpect((handler().methodName("homepage")))
-                .andExpect(view().name("homepage"));
-    }
-
-    @Test
-    @WithAnonymousUser
-    void testGetLoginShouldReturnLoginPage() throws Exception {
-        mockMvc.perform(get("/login"))
-                .andExpect(status().isOk())
-                .andExpect((handler().methodName("login")))
-                .andExpect(view().name("login"));
-    }
-
-    @Test
     @WithMockUser(roles = "USER")
-    void testGetLoginShouldRedirectToHomePage() throws Exception {
-        mockMvc.perform(get("/login"))
-                .andExpect(status().is(302))
-                .andExpect((handler().methodName("login")))
-                .andExpect(view().name("redirect:/"))
-                .andExpect(redirectedUrl("/"));
+    void testGetErrorPageShouldReturnErrorPage() throws Exception {
+        mockMvc.perform(get("/error"))
+                .andExpect(status().isOk())
+                .andExpect((handler().methodName("handleError")))
+                .andExpect(view().name("error"));
     }
 }
