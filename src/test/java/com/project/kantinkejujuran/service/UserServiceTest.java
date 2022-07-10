@@ -10,6 +10,8 @@ import com.project.kantinkejujuran.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -19,7 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceTest {
+class UserServiceTest {
     @Mock
     private UserRepository userRepository;
 
@@ -32,59 +34,35 @@ public class UserServiceTest {
     private UserDto userDto;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         userDto = new UserDto("12306", "1234567890");
     }
 
     @Test
-    public void testSaveUserSuccess() throws Exception {
+    void testSaveUserSuccess() throws Exception {
         userDto.setId("12306");
         userService.save(userDto);
         verify(userRepository, times(1)).save(any(User.class));
     }
 
-    @Test
-    public void testSaveUserIdNotValid() {
-        userDto.setId("12345");
+    @ParameterizedTest
+    @CsvSource({
+        "12345, ID is not valid",
+        "aaaaa, ID may only contain numbers",
+        "123, ID should consist of a 5 digits number",
+        "123456, ID should consist of a 5 digits number",
+    })
+    void testSaveUserIdNotValid(String id, String expectation) {
+        userDto.setId(id);
         Exception thrown = assertThrows(Exception.class, () -> {
             userService.save(userDto);
         });
-        assertEquals(thrown.getMessage(),"ID is not valid");
+        assertEquals(expectation, thrown.getMessage());
         verify(userRepository, times(0)).save(any(User.class));
     }
 
     @Test
-    public void testSaveUserIdIsNotNumber() {
-        userDto.setId("aaaaa");
-        Exception thrown = assertThrows(Exception.class, () -> {
-            userService.save(userDto);
-        });
-        assertEquals(thrown.getMessage(),"ID may only contain numbers");
-        verify(userRepository, times(0)).save(any(User.class));
-    }
-
-    @Test
-    public void testSaveUserIdLessThanFiveDigits() {
-        userDto.setId("123");
-        Exception thrown = assertThrows(Exception.class, () -> {
-            userService.save(userDto);
-        });
-        assertEquals(thrown.getMessage(),"ID should consist of a 5 digits number");
-        verify(userRepository, times(0)).save(any(User.class));
-    }
-
-    @Test
-    public void testSaveUserIdMoreThanFiveDigits() {
-        userDto.setId("123456");
-        Exception thrown = assertThrows(Exception.class, () -> {
-            userService.save(userDto);
-        });
-        assertEquals(thrown.getMessage(),"ID should consist of a 5 digits number");
-        verify(userRepository, times(0)).save(any(User.class));
-    }
-
-    @Test
-    public void testSaveUserIdIsRegistered() {
+    void testSaveUserIdIsRegistered() {
         userDto = new UserDto();
         userDto.setId("12306");
         Optional<User> user = Optional.of(new User("12306", "1234567890", Role.USER));
@@ -92,56 +70,56 @@ public class UserServiceTest {
         Exception thrown = assertThrows(Exception.class, () -> {
             userService.save(userDto);
         });
-        assertEquals(thrown.getMessage(),"ID is already registered");
+        assertEquals("ID is already registered", thrown.getMessage());
         verify(userRepository, times(0)).save(any(User.class));
     }
 
     @Test
-    public void testValidateValidUserId() {
+    void testValidateValidUserId() {
         Boolean result = userService.validateUserId("42107");
         assertTrue(result);
     }
 
     @Test
-    public void testValidateNotValidUserId() {
+    void testValidateNotValidUserId() {
         Boolean result = userService.validateUserId("45111");
         assertFalse(result);
     }
 
     @Test
-    public void testValidateIdLessThanFiveDigits() {
+    void testValidateIdLessThanFiveDigits() {
         Exception thrown = assertThrows(Exception.class, () -> {
             userService.validateUserId("321");
         });
-        assertEquals(thrown.getMessage(),"ID should consist of a 5 digits number");
+        assertEquals("ID should consist of a 5 digits number", thrown.getMessage());
     }
 
     @Test
-    public void testValidateIdMoreThanFiveDigits() {
+    void testValidateIdMoreThanFiveDigits() {
         Exception thrown = assertThrows(Exception.class, () -> {
             userService.validateUserId("654321");
         });
-        assertEquals(thrown.getMessage(),"ID should consist of a 5 digits number");
+        assertEquals("ID should consist of a 5 digits number", thrown.getMessage());
     }
 
     @Test
-    public void testValidateIsNotNumber() {
+    void testValidateIsNotNumber() {
         Exception thrown = assertThrows(Exception.class, () -> {
             userService.validateUserId("abcde");
         });
-        assertEquals(thrown.getMessage(),"ID may only contain numbers");
+        assertEquals("ID may only contain numbers", thrown.getMessage());
     }
 
     @Test
-    public void testLoadUserByUsernameNotFound() {
+    void testLoadUserByUsernameNotFound() {
         UsernameNotFoundException thrown = assertThrows(UsernameNotFoundException.class, () -> {
             userService.loadUserByUsername("54321");
         });
-        assertEquals(thrown.getMessage(),"Invalid ID or password");
+        assertEquals("Invalid ID or password", thrown.getMessage());
     }
 
     @Test
-    public void testLoadUserByUsernameFound() {
+    void testLoadUserByUsernameFound() {
         User user = new User("12306", "1234567890", Role.USER);
         Optional<User> userOptional = Optional.of(user);
 
@@ -153,13 +131,13 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testGetUserByIdNotFound() {
+    void testGetUserByIdNotFound() {
         User user = userService.getUserById("54321");
         assertNull(user);
     }
 
     @Test
-    public void testGetUserByIdFound() {
+    void testGetUserByIdFound() {
         User user = new User("12306", "1234567890", Role.USER);
         Optional<User> userOptional = Optional.of(user);
         when(userRepository.findById("12306")).thenReturn(userOptional);
